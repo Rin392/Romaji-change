@@ -1,76 +1,181 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ローマ字変換ツール</title>
-    <style>
+    <style>/* Tổng thể */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Merriweather', serif; /* Phông chữ serif cổ điển */
+    background-color: #f5f0e1; /* Nền màu giấy cũ */
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    background-image: url('texture-giay-cu.jpg'); /* Thay 'texture-giay-cu.jpg' bằng URL texture giấy cũ của bạn */
+    background-size: cover; /* Đảm bảo texture phủ nền */
 }
 
 .container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 800px;
+    background-color: rgba(245, 240, 225, 0.9); /* Nền container trong suốt nhẹ */
+    border: 3px double #a0522d; /* Viền đôi màu nâu gỗ */
+    border-radius: 15px;
+    padding: 50px;
+    width: 85%;
+    max-width: 600px;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.3); /* Bóng đổ nhẹ */
 }
 
 h1 {
     text-align: center;
-    margin-bottom: 20px;
+    color: #5e3a3a; /* Màu nâu đỏ sẫm cho tiêu đề */
+    font-family: 'Playfair Display', serif; /* Phông chữ tiêu đề serif trang trọng */
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); /* Bóng đổ chữ nhẹ */
+    position: relative; /* Để định vị đường kẻ trang trí */
 }
 
+h1 {
+  text-align: center; /* Bỏ dòng này. Flexbox sẽ căn giữa */
+  color: #5e3a3a;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5em;
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+  position: relative; /* Giữ lại để dùng cho ::after và ::before */
+  display: flex; /* Bật Flexbox */
+  justify-content: space-between; /* Chia đều khoảng trống cho đường kẻ và chữ */
+  align-items: center; /* Căn giữa các thành phần theo chiều dọc */
+  width: 100%; /* Quan trọng: h1 chiếm toàn bộ chiều ngang */
+}
+
+h1::after, h1::before {
+  content: "";
+  display: block;
+  border-top: 0.1em dotted #a0522d;
+  /* width: 125px; Xóa dòng này */
+  width: 20%; /* Độ dài đường kẻ, tính theo % chiều rộng h1 */
+  position: static; /* Để flexbox tự căn chỉnh */
+  /* top: 50%; Xóa dòng này */
+  /* transform: translateY(-50%); Xóa dòng này */
+}
+
+/* Tùy chọn: Chỉnh độ dài đường kẻ cho từng loại màn hình */
+@media (max-width: 768px) {
+  h1::after, h1::before {
+    width: 30%; /* Đường kẻ ngắn hơn trên màn hình nhỏ */
+  }
+}
+
+h1::before {
+    left: 0;
+}
+
+h1::after {
+    right: 0;
+}
+
+
 .input-area, .output-area {
-    margin-bottom: 15px;
+    margin-bottom: 30px;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.8); /* Nền trắng hơi trong suốt cho khu vực input/output */
+    border: 2px solid #a0522d; /* Viền màu nâu gỗ */
+    border-radius: 10px;
 }
 
 textarea {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    min-height: 150px;
+    padding: 15px;
+    border: 1px solid #a0522d; /* Viền textarea màu nâu gỗ */
+    border-radius: 5px;
     resize: vertical;
+    font-size: 16px;
+    line-height: 1.6;
+    box-sizing: border-box;
+    font-family: 'Courier New', monospace; /* Phông chữ monospace kiểu máy đánh chữ */
+    color: #333; /* Chữ màu xám đậm */
+}
+
+textarea::placeholder {
+    color: #777; /* Placeholder xám nhạt hơn */
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #cd853f; /* Viền focus màu vàng đồng */
+    box-shadow: 0 0 5px rgba(205, 133, 63, 0.5); /* Bóng đổ focus màu vàng đồng */
 }
 
 button {
-    display: block;
-    margin: 0 auto;
-    padding: 10px 15px;
-    background-color: #007bff;
+    background-color: #a0522d; /* Nút màu nâu gỗ */
     color: white;
+    padding: 15px 35px;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: block;
+    margin: 20px auto 0;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3); /* Bóng đổ nút */
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #8b4513; /* Nút màu nâu sẫm hơn khi hover */
+    transform: scale(1.05); /* Phóng to nút nhẹ khi hover */
+}
+
+button:active {
+    transform: scale(0.98); /* Thu nhỏ nút nhẹ khi nhấn */
+    box-shadow: inset 2px 2px 3px rgba(0, 0, 0, 0.3); /* Bóng đổ lõm khi nhấn */
+}
+.header{
+    background-color: #a0522d; /* Header màu nâu gỗ */
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 2.2em;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.footer {
+    background-color: #a0522d; /* Footer màu nâu gỗ */  
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 2.2em;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+@font-face {
+  font-family: 'baloo'; /* Tên font*/
+  src: url('../fonts/Baloo-Regular.ttf') format('truetype'); /* Đường dẫn tới các file font */
+  font-weight: normal; /* Độ đậm mặc định của font */
+  font-style: normal;  /* Kiểu font mặc định (normal, italic, oblique) */
+  font-display: swap; /* Tối ưu hiển thị font khi tải */
+}
+.footer, .header {
+    font-family: 'baloo';
 }
     </style>
 </head>
 <body>
     <div class="container">
+        <h1 class="header">&copy; CYAN TEAM</h1>
         <h1>ローマ字変換ツール</h1>
         <div class="input-area">
-            <textarea id="inputText" placeholder="日本語のテキストを入力してください"></textarea>
+            <textarea lang="ja" id="inputText" placeholder="日本語のテキストを入力してください"></textarea>
         </div>
+        <button id="convertButton">変換</button></br></br>
         <div class="output-area">
-            <textarea id="outputText" placeholder="変換結果" readonly></textarea>
+            <textarea lang="ja" id="outputText" placeholder="変換結果" readonly></textarea>
         </div>
-        <button id="convertButton">変換</button>
+        <h1 class="footer">&copy; CYAN TEAM</h1>
     </div>
     <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -85,83 +190,170 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function convertToRomaji(text) {
-        // Bảng chuyển đổi Hiragana và Katakana sang Romaji (Hepburn)
         const kanaToRomaji = {
-             'あ':'a', 'い':'i', 'う':'u', 'え':'e', 'お':'o',
-             'か':'ka', 'き':'ki', 'く':'ku', 'け':'ke', 'こ':'ko',
-            'さ':'sa', 'し':'shi', 'す':'su', 'せ':'se', 'そ':'so',
-            'た':'ta', 'ち':'chi', 'つ':'tsu', 'て':'te', 'と':'to',
-            'な':'na', 'に':'ni', 'ぬ':'nu', 'ね':'ne', 'の':'no',
-            'は':'ha', 'ひ':'hi', 'ふ':'fu', 'へ':'he', 'ほ':'ho',
-            'ま':'ma', 'み':'mi', 'む':'mu', 'め':'me', 'も':'mo',
-            'や':'ya', 'ゆ':'yu', 'よ':'yo',
-            'ら':'ra', 'り':'ri', 'る':'ru', 'れ':'re', 'ろ':'ro',
-            'わ':'wa', 'を':'o', 'ん':'n',
-            'が':'ga', 'ぎ':'gi', 'ぐ':'gu', 'げ':'ge', 'ご':'go',
-            'ざ':'za', 'じ':'ji', 'ず':'zu', 'ぜ':'ze', 'ぞ':'zo',
-            'だ':'da', 'ぢ':'ji', 'づ':'zu', 'で':'de', 'ど':'do',
-            'ば':'ba', 'び':'bi', 'ぶ':'bu', 'べ':'be', 'ぼ':'bo',
-            'ぱ':'pa', 'ぴ':'pi', 'ぷ':'pu', 'ぺ':'pe', 'ぽ':'po',
-           'きゃ':'kya', 'きゅ':'kyu', 'きょ':'kyo',
-           'しゃ':'sha', 'しゅ':'shu', 'しょ':'sho',
-           'ちゃ':'cha', 'ちゅ':'chu', 'ちょ':'cho',
-           'にゃ':'nya', 'にゅ':'nyu', 'にょ':'nyo',
-           'ひゃ':'hya', 'ひゅ':'hyu', 'ひょ':'hyo',
-           'みゃ':'mya', 'みゅ':'myu', 'みょ':'myo',
-           'りゃ':'rya', 'りゅ':'ryu', 'りょ':'ryo',
-           'ぎゃ':'gya', 'ぎゅ':'gyu', 'ぎょ':'gyo',
-           'じゃ':'ja', 'じゅ':'ju', 'じょ':'jo',
-           'ぢゃ':'ja', 'ぢゅ':'ju', 'ぢょ':'jo',
-           'びゃ':'bya', 'びゅ':'byu', 'びょ':'byo',
-           'ぴゃ':'pya', 'ぴゅ':'pyu', 'ぴょ':'pyo',
-           'ア':'a', 'イ':'i', 'ウ':'u', 'エ':'e', 'オ':'o',
-            'カ':'ka', 'キ':'ki', 'ク':'ku', 'ケ':'ke', 'コ':'ko',
-            'サ':'sa', 'シ':'shi', 'ス':'su', 'セ':'se', 'ソ':'so',
-            'タ':'ta', 'チ':'chi', 'ツ':'tsu', 'テ':'te', 'ト':'to',
-            'ナ':'na', 'ニ':'ni', 'ヌ':'nu', 'ネ':'ne', 'ノ':'no',
-            'ハ':'ha', 'ヒ':'hi', 'フ':'fu', 'ヘ':'he', 'ホ':'ho',
-            'マ':'ma', 'ミ':'mi', 'ム':'mu', 'メ':'me', 'モ':'mo',
-            'ヤ':'ya', 'ユ':'yu', 'ヨ':'yo',
-            'ラ':'ra', 'リ':'ri', 'ル':'ru', 'レ':'re', 'ロ':'ro',
-            'ワ':'wa', 'ヲ':'o', 'ン':'n',
-            'ガ':'ga', 'ギ':'gi', 'グ':'gu', 'ゲ':'ge', 'ゴ':'go',
-            'ザ':'za', 'ジ':'ji', 'ズ':'zu', 'ゼ':'ze', 'ゾ':'zo',
-            'ダ':'da', 'ヂ':'ji', 'ヅ':'zu', 'デ':'de', 'ド':'do',
-            'バ':'ba', 'ビ':'bi', 'ブ':'bu', 'ベ':'be', 'ボ':'bo',
-            'パ':'pa', 'ピ':'pi', 'プ':'pu', 'ペ':'pe', 'ポ':'po',
-            'キャ':'kya', 'キュ':'kyu', 'キョ':'kyo',
-           'シャ':'sha', 'シュ':'shu', 'ショ':'sho',
-           'チャ':'cha', 'チュ':'chu', 'チョ':'cho',
-           'ニャ':'nya', 'ニュ':'nyu', 'ニョ':'nyo',
-           'ヒャ':'hya', 'ヒュ':'hyu', 'ヒョ':'hyo',
-           'ミャ':'mya', 'ミュ':'myu', 'ミョ':'myo',
-           'リャ':'rya', 'リュ':'ryu', 'リョ':'ryo',
-           'ギャ':'gya', 'ギュ':'gyu', 'ギョ':'gyo',
-           'ジャ':'ja', 'ジュ':'ju', 'ジョ':'jo',
-           'ヂャ':'ja', 'ヂュ':'ju', 'ヂョ':'jo',
-           'ビャ':'bya', 'ビュ':'byu', 'ビョ':'byo',
-           'ピャ':'pya', 'ピュ':'pyu', 'ピョ':'pyo',
-           'ー':'-', '、':',', '。':'.', '「':'"', '」':'"'
-        };
+            'あ':'a', 'い':'i', 'う':'u', 'え':'e', 'お':'o',
+    'か':'ka', 'き':'ki', 'く':'ku', 'け':'ke', 'こ':'ko',
+   'さ':'sa', 'し':'shi', 'す':'su', 'せ':'se', 'そ':'so',
+   'た':'ta', 'ち':'chi', 'つ':'tsu', 'て':'te', 'と':'to',
+   'な':'na', 'に':'ni', 'ぬ':'nu', 'ね':'ne', 'の':'no',
+   'は':'ha', 'ひ':'hi', 'ふ':'fu', 'へ':'he', 'ほ':'ho',
+   'ま':'ma', 'み':'mi', 'む':'mu', 'め':'me', 'も':'mo',
+   'や':'ya', 'ゆ':'yu', 'よ':'yo',
+   'ら':'ra', 'り':'ri', 'る':'ru', 'れ':'re', 'ろ':'ro',
+   'わ':'wa', 'を':'o', 'ん':'n',
+   'が':'ga', 'ぎ':'gi', 'ぐ':'gu', 'げ':'ge', 'ご':'go',
+   'ざ':'za', 'じ':'ji', 'ず':'zu', 'ぜ':'ze', 'ぞ':'zo',
+   'だ':'da', 'ぢ':'ji', 'づ':'zu', 'で':'de', 'ど':'do',
+   'ば':'ba', 'び':'bi', 'ぶ':'bu', 'べ':'be', 'ぼ':'bo',
+   'ぱ':'pa', 'ぴ':'pi', 'ぷ':'pu', 'ぺ':'pe', 'ぽ':'po',
+  'きゃ':'kya', 'きゅ':'kyu', 'きょ':'kyo',
+  'しゃ':'sha', 'しゅ':'shu', 'しょ':'sho',
+  'ちゃ':'cha', 'ちゅ':'chu', 'ちょ':'cho',
+  'にゃ':'nya', 'にゅ':'nyu', 'にょ':'nyo',
+  'ひゃ':'hya', 'ひゅ':'hyu', 'ひょ':'hyo',
+  'みゃ':'mya', 'みゅ':'myu', 'みょ':'myo',
+  'りゃ':'rya', 'りゅ':'ryu', 'りょ':'ryo',
+  'ぎゃ':'gya', 'ぎゅ':'gyu', 'ぎょ':'gyo',
+  'じゃ':'ja', 'じゅ':'ju', 'じょ':'jo',
+  'ぢゃ':'ja', 'ぢゅ':'ju', 'ぢょ':'jo',
+  'びゃ':'bya', 'びゅ':'byu', 'びょ':'byo',
+  'ぴゃ':'pya', 'ぴゅ':'pyu', 'ぴょ':'pyo',
+  'ぁ':'a', 'ぃ':'i', 'ぅ':'u', 'ぇ':'e', 'ぉ':'o',
+  'ァ':'a', 'ィ':'i', 'ゥ':'u', 'ェ':'e', 'ォ':'o',
+  'ア':'a', 'イ':'i', 'ウ':'u', 'エ':'e', 'オ':'o',
+   'カ':'ka', 'キ':'ki', 'ク':'ku', 'ケ':'ke', 'コ':'ko',
+   'サ':'sa', 'シ':'shi', 'ス':'su', 'セ':'se', 'ソ':'so',
+   'タ':'ta', 'チ':'chi', 'ツ':'tsu', 'テ':'te', 'ト':'to',
+   'ナ':'na', 'ニ':'ni', 'ヌ':'nu', 'ネ':'ne', 'ノ':'no',
+   'ハ':'ha', 'ヒ':'hi', 'フ':'fu', 'ヘ':'he', 'ホ':'ho',
+   'マ':'ma', 'ミ':'mi', 'ム':'mu', 'メ':'me', 'モ':'mo',
+   'ヤ':'ya', 'ユ':'yu', 'ヨ':'yo',
+   'ラ':'ra', 'リ':'ri', 'ル':'ru', 'レ':'re', 'ロ':'ro',
+   'ワ':'wa', 'を':'o', 'ン':'n',
+   'ガ':'ga', 'ギ':'gi', 'グ':'gu', 'ゲ':'ge', 'ゴ':'go',
+   'ザ':'za', 'ジ':'ji', 'ズ':'zu', 'ゼ':'ze', 'ゾ':'zo',
+   'ダ':'da', 'ヂ':'ji', 'ヅ':'zu', 'デ':'de', 'ド':'do',
+   'バ':'ba', 'ビ':'bi', 'ブ':'bu', 'ベ':'be', 'ボ':'bo',
+   'パ':'pa', 'ピ':'pi', 'プ':'pu', 'ペ':'pe', 'ポ':'po',
+  'キャ':'kya', 'キュ':'kyu', 'キョ':'kyo',
+  'シャ':'sha', 'シュ':'shu', 'ショ':'sho',
+  'チャ':'cha', 'チュ':'chu', 'チョ':'cho',
+  'ニャ':'nya', 'ニュ':'nyu', 'ニョ':'nyo',
+  'ヒャ':'hya', 'ヒュ':'hyu', 'ヒョ':'hyo',
+  'ミャ':'mya', 'ミュ':'myu', 'ミョ':'myo',
+  'リャ':'rya', 'リュ':'ryu', 'リョ':'ryo',
+  'ギャ':'gya', 'ギュ':'gyu', 'ギョ':'gyo',
+  'ジャ':'ja', 'ジュ':'ju', 'ジョ':'jo',
+  'ヂャ':'ja', 'ヂュ':'ju', 'ヂョ':'jo',
+  'ビャ':'bya', 'ビュ':'byu', 'ビョ':'byo',
+  'ピャ':'pya', 'ピュ':'pyu', 'ピョ':'pyo',
+            'ー': '', '、':',', '。':'.', '「':'"', '」':'"',
+            // Trường âm và ký tự kana
+            'ああ':'a','うう':'u','ええ':'e','おお':'o','おう':'o',
+            'アア':'a','ウウ':'u','エエ':'e','オオ':'o','オウ':'o',    
+    'かあ': 'ka', 'くう': 'ku', 'けえ': 'ke', 'こお': 'ko',
+    'カア': 'ka', 'クウ': 'ku', 'ケエ': 'ke', 'コオ': 'ko',
+    
+    'さあ': 'sa', 'すう': 'su', 'せえ': 'se', 'そお': 'so',
+    'サア': 'sa', 'スウ': 'su', 'セエ': 'se', 'ソオ': 'so',
+    
+    'たあ': 'ta', 'つう': 'tsu', 'てえ': 'te', 'とお': 'to',
+    'タア': 'ta', 'ツウ': 'tsu', 'テエ': 'te', 'トオ': 'to',
+    
+    'ばあ': 'ba', 'ぶう': 'bu', 'べえ': 'be', 'ぼお': 'bo',
+    'バア': 'ba', 'ブウ': 'bu', 'ベエ': 'be', 'ボオ': 'bo',
+    
+    'ぱあ': 'pa', 'ぷう': 'pu', 'ぺえ': 'pe', 'ぽお': 'po',
+    'パア': 'pa', 'プウ': 'pu', 'ペエ': 'pe', 'ポオ': 'po',
 
-        // Xử lý trường hợp đặc biệt
-        text = text.replace(/っ([bcdfghjklmpqrstvwxyz])/g, '$1$1');
+    'なあ': 'na', 'ぬう': 'nu', 'ねえ': 'ne', 'のお': 'no',
+    'ナア': 'na', 'ヌウ': 'nu', 'ネエ': 'ne', 'ノオ': 'no',
+    'まあ': 'ma', 'むう': 'mu', 'めえ': 'me', 'もお': 'mo',
+    'マア': 'ma', 'ムウ': 'mu', 'メエ': 'me', 'モオ': 'mo',
+    'らあ': 'ra', 'るう': 'ru', 'れえ': 're', 'ろお': 'ro',
+    'ラア': 'ra', 'ルウ': 'ru', 'レエ': 're', 'ロオ': 'ro',
+    'があ': 'ga', 'ぐう': 'gu', 'げえ': 'ge', 'ごお': 'go',
+    'ガア': 'ga', 'グウ': 'gu', 'ゲエ': 'ge', 'ゴオ': 'go',
+    'ざあ': 'za', 'ずう': 'zu', 'ぜえ': 'ze', 'ぞお': 'zo',
+    'ザア': 'za', 'ズウ': 'zu', 'ゼエ': 'ze', 'ゾオ': 'zo',
+    'だあ': 'da', 'づう': 'zu', 'でえ': 'de', 'どお': 'do',
+    'ダア': 'da', 'ヅウ': 'zu', 'デエ': 'de', 'ドオ': 'do',
+    'はあ': 'ha', 'ふう': 'fu', 'へえ': 'he', 'ほお': 'ho',
+    'ハア': 'ha', 'フウ': 'fu', 'ヘエ': 'he', 'ホオ': 'ho',
+    'やあ': 'ya', 'ゆう': 'yu', 'よう': 'yo',
+    'ヤア': 'ya', 'ユウ': 'yu', 'ヨウ': 'yo',
+    
+    'びょう': 'byo', 'ぴょう': 'pyo', 'しゅう': 'shu', 'じゅう': 'ju',
+    'ちょう': 'cho', 'りょう': 'ryo', 'ぎょう': 'gyou', 'きゅう': 'kyu',
+    'にゅう': 'nyu', 'ひゅう': 'hyu',
+    
+    'ビョウ': 'byo', 'ピョウ': 'pyo', 'シュウ': 'shu', 'ジュウ': 'ju',
+    'チョウ': 'cho', 'リョウ': 'ryo', 'ギョウ': 'gyo', 'キュウ': 'kyu',
+    'ニュウ': 'nyu', 'ヒュウ': 'hyu',
+            // Các ký tự ghép âm
+            'ゃ': 'ya', 'ゅ': 'yu', 'ょ': 'yo', 'ャ': 'ya', 'ュ': 'yu', 'ョ': 'yo',
+            // Xử lý "っ" và "ッ"
+            'っ': '', 'ッ': ''
+        };
         
         let romaji = '';
         for (let i = 0; i < text.length; i++) {
-            const char = text[i];
-            if (kanaToRomaji[char]) {
-              romaji += kanaToRomaji[char];
-              } else {
-            romaji += char
-           }
-        }
+            let char = text[i];
+            let nextChar = text[i + 1];
+          // Xử lý trường hợp trường âm
+            if (char === 'ー') {
+                continue;
+            }
+            if (char === 'え' && nextChar === 'い') {
+                romaji += 'ei';
+                i++;
+                continue;
+            }
+            if (char === 'い' && nextChar === 'い') {
+                romaji += 'ii';
+                i++;
+                continue;
+            }
+            // Xử lý trường hợp "ん" trước p, b, m
+            if (char === 'ん' || char === 'ン') {
+    if (nextChar && /[pbmPBM]/.test(nextChar)) {
+        romaji += 'm';  // Nếu ký tự tiếp theo là p, b, m, thêm "m"
+    } else {
+        romaji += 'n';  // Nếu không phải, thêm "n"
+    }
+    continue;
+}
+            
+            // Xử lý trường hợp "っ" và "ッ"
+            if (char === 'っ' || char === 'ッ') {
+                if (nextChar && kanaToRomaji[nextChar]) {
+                    romaji += kanaToRomaji[nextChar].charAt(0);  // Nhân đôi phụ âm
+                } else {
+                    romaji += "tsu"; // Nếu không có ký tự sau, thêm "tsu"
+                }
+                continue;
+            }
+            
 
+            // Xử lý các trường hợp ghép âm
+            if (['ゃ', 'ゅ', 'ょ', 'ャ', 'ュ', 'ョ'].includes(nextChar)) {
+                let combinedChar = char + nextChar;
+                if (kanaToRomaji[combinedChar]) {
+                    romaji += kanaToRomaji[combinedChar];
+                    i++;
+                } else {
+                    romaji += kanaToRomaji[char] || char;
+                }
+            } else {
+                romaji += kanaToRomaji[char] || char;
+            }
+        }
+        
         // Viết hoa chữ cái đầu
         if (romaji.length > 0) {
-          romaji = romaji.charAt(0).toUpperCase() + romaji.slice(1);
+            romaji = romaji.charAt(0).toUpperCase() + romaji.slice(1);
         }
-
+        
         return romaji;
     }
 });
